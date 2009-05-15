@@ -50,7 +50,7 @@ module RVideo
       
       @offset, @rate, @limit, @output = parse_options options
       
-      @command = "ffmpeg -i #{@input.shell_quoted} -ss #{@offset} -r #{@rate} #{@output.shell_quoted}"
+      @command = "ffmpeg -i #{@input.shell_quoted} -ss #{@offset} -r #{@rate} #{@output.shell_quoted} -vframes #{@limit}"
     end
     
     def capture!
@@ -98,12 +98,11 @@ module RVideo
       offset = options[:offset] ? calculate_time(options[:offset]) : 0
       rate   = options[:interval] ? (1 / options[:interval].to_f) : 1
       
-      limit  = nil
-      # if options[:limit]
-      #   options[:limit]
-      # elsif not options[:interval]
-      #   1
-      # end
+      limit  = if options[:limit]
+                  options[:limit]
+                elsif not options[:interval]
+                  1
+                end
       
       output = if options[:output]
         options[:output]
