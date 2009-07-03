@@ -471,8 +471,8 @@ module RVideo # :nodoc:
         #{SEP}?
       (?:#{RATE}\s*(kb\/s)#{SEP}?)?                               # video bit rate
       (?:#{RATE}\s*(?:tb\(?r\)?|#{FPS})#{SEP}?)?                  # frame rate
-      (?:#{RATE}\s*tbn#{SEP}?)?                                   # time base
-      (?:#{RATE}\s*tbc#{SEP}?)?                                   # codec time base
+      (?:#{RATE}\s*tb\(?n\)?#{SEP}?)?                             # time base
+      (?:#{RATE}\s*tb\(?c\)?#{SEP}?)?                             # codec time base
     /x
     
     def video_match
