@@ -65,7 +65,7 @@ describe FrameCapturer, "calculating offset from a timecode argument" do
     f = FrameCapturer.new :input => spec_file('kites.mp4'),
       :interval => 5
     assert_equal \
-      %{ffmpeg -i '#{f.input}' -ss 0 -r 0.2 -f image2 -vframes 1 '#{f.output}'},
+      %{ffmpeg -i '#{f.input}' -ss 0 -r 0.2 -f image2 '#{f.output}'},
       f.command
   end
 end

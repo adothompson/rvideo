@@ -50,7 +50,7 @@ module RVideo
       
       @offset, @rate, @limit, @output = parse_options options
       
-      @command = "ffmpeg -i #{@input.shell_quoted} -ss #{@offset} -r #{@rate} -f image2 -vframes #{@limit} #{@output.shell_quoted}"
+      @command = "ffmpeg -i #{@input.shell_quoted} -ss #{@offset} -r #{@rate} -f image2 #{"-vframes #{@limit} " if @limit}#{@output.shell_quoted}"
     end
     
     def capture!
