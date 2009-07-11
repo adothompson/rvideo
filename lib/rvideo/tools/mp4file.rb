@@ -9,10 +9,6 @@ module RVideo
         'mp4file'
       end
 
-      def format_fps(params={})
-          " -rate=#{params[:fps]}" 
-      end
-
       def parse_result(result)
         if m = /MP4ERROR: MP4Open: failed: No such file or directory\n/.match(result)
           raise TranscoderError::InputFileNotFound
