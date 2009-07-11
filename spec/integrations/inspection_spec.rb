@@ -109,4 +109,34 @@ module RVideo
       assert_equal "11:9", @i.display_aspect_ratio
     end
   end
+
+  describe Inspector, "with elrellano-pilot.txt (ffmpeg 0.5 output)" do
+    before :each do
+      @i = Inspector.new :raw_response => File.open(spec_file("elrellano-pilot.txt")).read
+    end
+
+    it "knows the video bitrate" do
+      assert_equal "400", @i.video_bit_rate
+    end
+    
+    it "knows the video bitrate units" do
+      assert_equal "kb/s", @i.video_bit_rate_units
+    end
+    
+    it "knows the resolution" do
+      assert_equal "320x240", @i.resolution
+    end
+    
+    it "knows the frame rate" do
+      assert_equal "25", @i.framerate
+    end
+    
+    it "knows the pixel aspect ratio" do
+      assert_equal "1:1", @i.pixel_aspect_ratio
+    end
+    
+    it "knows the display aspect ratio" do
+      assert_equal "4:3", @i.display_aspect_ratio
+    end
+  end
 end

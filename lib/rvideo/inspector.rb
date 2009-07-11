@@ -384,23 +384,23 @@ module RVideo # :nodoc:
     
     def pixel_aspect_ratio
       return nil unless video?
-      video_match[7]
+      video_match[9]
     end
     
     def display_aspect_ratio
       return nil unless video?
-      video_match[8]
+      video_match[10]
     end
     
     # The portion of the overall bitrate the video is responsible for.
     def video_bit_rate
       return nil unless video?
-      video_match[9]
+      video_match[7] || video_match[11]
     end
     
     def video_bit_rate_units
       return nil unless video?
-      video_match[10]
+      video_match[8] || video_match[12]
     end
     
     # The frame rate of the video in frames per second
@@ -411,18 +411,18 @@ module RVideo # :nodoc:
     #
     def fps
       return nil unless video?
-      video_match[2] or video_match[11]
+      video_match[2] or video_match[13]
     end
     alias_method :framerate, :fps
     
     def time_base
       return nil unless video?
-      video_match[12]
+      video_match[14]
     end
     
     def codec_time_base
       return nil unless video?
-      video_match[13]
+      video_match[15]
     end
     
     private
@@ -457,22 +457,23 @@ module RVideo # :nodoc:
     
     FPS = 'fps(?:\(r\))?'
     
-	# FIXME tbn/tbc may need braced alternatives, too: tb(n) / tb(c) - not tested
-	# not fixing as of yet because it renumbers backrefs
     VIDEO_MATCH_PATTERN = /
-      Stream\s*(\#[\d.]+)(?:[\(\[].+?[\)\]])?\s*                  # stream id
-      [,:]\s*                                                     
-      (?:#{RATE}\s*#{FPS}[,:]\s*)?                                # frame rate, older builds
-      Video:\s*                                                   
-      #{VAL}#{SEP}                                                # codec
-      (?:#{VAL}#{SEP})?                                           # color space
-      (\d+)x(\d+)#{SEP}?                                          # resolution
-        (?:\s*\[?(?:PAR\s*(\d+:\d+))?\s*(?:DAR\s*(\d+:\d+))?\]?)? # pixel and display aspect ratios
-        #{SEP}?
-      (?:#{RATE}\s*(kb\/s)#{SEP}?)?                               # video bit rate
-      (?:#{RATE}\s*(?:tb\(?r\)?|#{FPS})#{SEP}?)?                  # frame rate
-      (?:#{RATE}\s*tb\(?n\)?#{SEP}?)?                             # time base
-      (?:#{RATE}\s*tb\(?c\)?#{SEP}?)?                             # codec time base
+      Stream\s*(\#[\d.]+)(?:[\(\[].+?[\)\]])?\s*  # stream id (1)
+      [,:]\s*                                     
+      (?:#{RATE}\s*#{FPS}[,:]\s*)?                # frame rate, older builds (2)
+      Video:\s*                                   
+      #{VAL}#{SEP}                                # codec (3)
+      (?:#{VAL}#{SEP})?                           # color space (4)
+      (\d+)x(\d+)#{SEP}?                          # resolution (5,6)
+      (?:#{RATE}\s*(kb\/s)#{SEP}?)?               # video bit rate (7,8)
+      (?:\s*\[?
+        (?:PAR\s*(\d+:\d+))?\s*                   # pixel aspect ratio (9)
+        (?:DAR\s*(\d+:\d+))?\s*                   # display aspect ratio (10)
+      \]?)?#{SEP}?
+      (?:#{RATE}\s*(kb\/s)#{SEP}?)?               # video bit rate (11,12)
+      (?:#{RATE}\s*(?:tb\(?r\)?|#{FPS})#{SEP}?)?  # frame rate (13)
+      (?:#{RATE}\s*tb\(?n\)?#{SEP}?)?             # time base (14)
+      (?:#{RATE}\s*tb\(?c\)?#{SEP}?)?             # codec time base (15)
     /x
     
     def video_match
