@@ -74,7 +74,7 @@ module RVideo # :nodoc:
       RVideo.logger.info("\nNew transcoder job\n================\nTask: #{task}\nOptions: #{options.inspect}")
       parse_and_execute(task, options)      
       @processed = Inspector.new(:file => options[:output_file])
-      result = check_integrity
+      result = check_integrity(options[:skip_time_validations])
       RVideo.logger.info("\nFinished task. Total errors: #{@errors.size}\n")
       @total_time = Time.now - t1
       result
@@ -94,12 +94,12 @@ module RVideo # :nodoc:
       end
     end
     
-    def check_integrity
+    def check_integrity(skip_time_validations = false)
       precision = 1.1
       if @processed.invalid?
         @errors << "Output file invalid"
       elsif (@processed.duration >= (original.duration * precision) or @processed.duration <= (original.duration / precision))
-        @errors << "Original file has a duration of #{original.duration}, but processed file has a duration of #{@processed.duration}"
+        @errors << "Original file has a duration of #{original.duration}, but processed file has a duration of #{@processed.duration}" unless skip_time_validations
       end
       return @errors.size == 0
     end
