@@ -53,7 +53,7 @@ module RVideo # :nodoc:
           @output_params = {}
       
           # Dump the log output into a temp file
-          log_temp_file_name = "/tmp/transcode_output_#{Time.now.to_i}.txt"
+          log_temp_file_name = "/tmp/transcode_output_#{Time.now.to_f}.#{$$}.#{rand(10**6)}.txt"
     
           final_command = "#{@command} 2>#{log_temp_file_name}"
 
